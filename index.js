@@ -25,6 +25,7 @@ async function run() {
         console.log('connected successfully');
         const database = client.db('potteryDb');
         const productsCollection = database.collection('products');
+        const purchaseCollection = database.collection('purchase');
         const reviewCollection = database.collection('review');
 
 
@@ -32,6 +33,25 @@ async function run() {
         app.get('/product', async (req, res) => {
             const cursor = productsCollection.find({});
             const result = await cursor.toArray();
+            res.json(result);
+        })
+
+
+        //find by id
+        app.get('/product/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log('getting product', id);
+            const query = { _id: ObjectId(id) };
+            const product = await productsCollection.findOne(query);
+            res.json(product)
+        })
+
+
+        //add bookings
+        app.post('/purchase', async (req, res) => {
+            const booking = req.body;
+            const result = await purchaseCollection.insertOne(booking);
+            console.log('booking', booking);
             res.json(result);
         })
 
