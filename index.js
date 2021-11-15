@@ -29,7 +29,7 @@ async function run() {
         const reviewCollection = database.collection('review');
 
 
-
+        //product---------
         app.get('/product', async (req, res) => {
             const cursor = productsCollection.find({});
             const result = await cursor.toArray();
@@ -45,20 +45,28 @@ async function run() {
             const product = await productsCollection.findOne(query);
             res.json(product)
         })
+        // -------------------
 
 
-        //add bookings
+
+
+        //add bookings----------
         app.post('/purchase', async (req, res) => {
             const booking = req.body;
             const result = await purchaseCollection.insertOne(booking);
             console.log('booking', booking);
             res.json(result);
         })
+        // --------------------
 
 
-        //review
+
+        //review------------------
         app.post('/review', async (req, res) => {
-
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
+            console.log('booking', review);
+            res.json(result);
 
         })
 
@@ -68,6 +76,8 @@ async function run() {
             const result = await cursor.toArray();
             res.json(result);
         })
+        // --------------
+
 
 
     } finally {
