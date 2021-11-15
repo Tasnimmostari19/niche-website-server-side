@@ -56,6 +56,15 @@ async function run() {
             res.json(result);
         })
 
+        app.post('/product', async (req, res) => {
+
+            const newProduct = req.body;
+            const result = await productsCollection.insertOne(newProduct);
+
+            console.log(req.body);
+            console.log(result);
+            res.json(result);
+        });
 
 
         // -------------------
@@ -88,6 +97,31 @@ async function run() {
                 },
             };
             const result = await purchaseCollection.updateOne(filter, updateDoc, options);
+        })
+
+
+
+        app.delete('/purchase/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await purchaseCollection.deleteOne(query);
+            console.log('deleting purchase', result);
+            res.json(result);
+        })
+
+
+
+
+        //load specific email address
+        app.get('/purchase/myOrder', async (req, res) => {
+            let query = {};
+            const email = req.query.email;
+            if (email) {
+                query = { email: email };
+            }
+            const cursor = purchaseCollection.find(query)
+            const orders = await cursor.toArray();
+            res.json(orders);
         })
 
 
