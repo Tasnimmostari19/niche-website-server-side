@@ -38,7 +38,7 @@ async function run() {
         })
 
 
-        //find by id
+        //product find by id
         app.get('/product/:id', async (req, res) => {
             const id = req.params.id;
             console.log('getting product', id);
@@ -46,6 +46,18 @@ async function run() {
             const product = await productsCollection.findOne(query);
             res.json(product)
         })
+
+
+        app.delete('/product/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await productsCollection.deleteOne(query);
+            console.log('deleting order', result);
+            res.json(result);
+        })
+
+
+
         // -------------------
 
 
@@ -58,6 +70,27 @@ async function run() {
             console.log('booking', booking);
             res.json(result);
         })
+
+        app.get('/purchase', async (req, res) => {
+            const cursor = purchaseCollection.find({});
+            const result = await cursor.toArray();
+            res.json(result);
+        })
+
+        app.put('/purchase/:id', async (req, res) => {
+            const id = req.params.id;
+
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    status: `Shipped`
+                },
+            };
+            const result = await purchaseCollection.updateOne(filter, updateDoc, options);
+        })
+
+
         // --------------------
 
 
