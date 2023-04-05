@@ -192,7 +192,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('Hello World!sjfksjfhkjhfiuerf')
+    res.send('Hello World!')
 })
 
 app.listen(port, () => {
